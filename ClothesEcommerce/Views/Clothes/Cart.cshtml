@@ -1,0 +1,153 @@
+﻿@model IEnumerable<ClothesEcommerce.Models.Card_>
+
+@{
+    ViewBag.Title = "Cart";
+    Layout = "~/Views/_LayoutPage1.cshtml";
+}
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .container {
+        margin-top: 50px;
+    }
+
+    h2 {
+        text-align: center;
+        color: #343a40;
+    }
+
+    .checkout-button {
+        background-color: #007bff;
+        color: #ffffff;
+        transition: background-color 0.3s ease;
+    }
+
+        
+
+    .paypal-button {
+        margin-top: 20px;
+        text-align: right;
+    }
+
+        .paypal-button img {
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+
+
+        .checkout-button:hover {
+            background-color: #003aff;
+        }
+
+    .quantity-container {
+        display: flex;
+        align-items: center;
+    }
+
+    .quantity-button {
+        background-color: #000000;
+        color: white;
+        border: none;
+        padding: 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 10px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+        
+    }
+
+    .quantity-display {
+        font-size: 18px;
+        margin: 0 10px;
+    }
+
+    .decrement-button[disabled],
+    .decrement-button[disabled]:hover {
+        background-color: #6c757d; /* Change color to indicate the disabled state */
+        cursor: not-allowed;
+    }
+
+    .increment-button:hover {
+        background-color: #343a40;
+    }
+
+    .disabled {
+        pointer-events: none; /* Disable click events */
+        opacity: 0.5; /* Adjust opacity to visually indicate the disabled state */
+    }
+
+    .table th,
+    .table td {
+        text-align: center;
+    }
+
+    .total {
+        text-align: right;
+        font-size: 20px;
+        margin-top: 20px;
+        color: #007bff;
+    }
+
+    
+</style>
+
+<div class="container">
+    <h2>Shopping Cart</h2>
+
+    @ViewBag.DeleteConfirmation
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Quantity</th>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Total</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <div class="quantity-container">
+                            <a href="@Url.Action("decrementQuantity", new { id = item.CardId })" @(item.Quantity == 1 ? "class=disabled" : "")>
+                                <button class="quantity-button decrement-button">-</button>
+                            </a>
+                            <span class="quantity-display">@Html.DisplayFor(carditem => item.Quantity)</span>
+                            <a href="@Url.Action("IncrementQuantity", new { id = item.CardId })">
+                                <button class="quantity-button increment-button">+</button>
+                            </a>
+                        </div>
+                    </td>
+                    <td>@Html.DisplayFor(modelItem => item.Cloth.ClothName)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Cloth.Price)</td>
+                    <td>@{ item.Amount = item.Quantity * item.Cloth.Price; }@Html.DisplayFor(modelItem => item.Amount)$</td>
+                    <td>
+                        <a href="@Url.Action("DeleteCardItem", new { id = item.CardId })">
+                            <img src="~/Icons/icons8-supprimer-24.png" alt="Delete" />
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="total">Total: @ViewBag.Total</div>
+    <div class="paypal-button">
+        <a href="https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_xclick&business=sb-6nptr28414453@business.example.com&currency_code=USD&amount=@ViewBag.Total&item_name=Clothes&return=@Url.Action("Checkout")">
+            <button type="button" class="checkout-button">
+                
+                Proceed to Payment >>
+            </button>
+        </a>
+    </div>
+</div>

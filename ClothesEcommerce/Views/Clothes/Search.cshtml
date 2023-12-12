@@ -1,0 +1,45 @@
+﻿@model IEnumerable<ClothesEcommerce.Models.Cloth>
+
+@{
+    ViewBag.Title = "Search";
+    Layout = "~/Views/_LayoutPage1.cshtml";
+}
+
+<br /><br />
+<div class="row">
+    @foreach (var cloth in Model)
+    {
+
+        <div class="col-md-4">
+            <div class="card mb-4 box-shadow">
+                @{
+                    var Firstpic = cloth.Pictures.FirstOrDefault();
+                }
+                <img class="card-img-top" style="object-fit:contain; height: 225px" src="@Url.Content(Firstpic.PicturePath)" alt="Product Image">
+                <div class="card-body">
+                    <h2>@cloth.ClothName</h2>
+                    <p>@cloth.Description</p>
+                    <h2>@cloth.Price$</h2>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+
+                            @Html.ActionLink("View details >>", "Details", new { id = cloth.ClothesID }, new { @class = "btn btn-sm btn-outline-secondary" })
+
+                            @if (Session["admin"] != null)
+                            {
+                                <a href="@Url.Action("Delete", new { id = cloth.ClothesID })" class="btn btn-sm btn-outline-secondary">
+                                    <img src="@Url.Content("~/Icons/icons8-trash-26.png")" alt="Delete" />
+                                </a>
+                            }
+
+                            @if (Session["user"] != null && Session["admin"] == null)
+                            {
+                                <button type="button" class="btn btn-sm btn-outline-secondary" href="@Url.Action("Cart", new {id=cloth.ClothesID})">Add to Cart</button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

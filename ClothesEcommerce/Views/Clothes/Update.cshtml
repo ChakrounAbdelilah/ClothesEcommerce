@@ -1,0 +1,64 @@
+﻿@model ClothesEcommerce.Models.Cloth
+@{
+    ViewBag.Title = "Update";
+    Layout = "~/Views/_LayoutPage1.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h2 class="card-title">Update Clothes</h2>
+        </div>
+        <div class="card-body">
+            
+           
+                <h3 class="alert-info"> @ViewBag.Msg </h3>
+                
+            
+
+            @using (Html.BeginForm("Update", "Clothes", FormMethod.Post, new { @class = "form-horizontal" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="mb-3">
+                    @Html.HiddenFor(model => model.ClothesID)
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(model => model.ClothName, new { @class = "form-label" })
+                    @Html.EditorFor(model => model.ClothName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ClothName, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(model => model.Description, new { @class = "form-label" })
+                    @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(model => model.Price, new { @class = "form-label" })
+                    @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(model => model.Category, new { @class = "form-label" })
+                    @Html.DropDownListFor(model => model.Category, (SelectList)ViewBag.ClothesCategory, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Category, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    @Html.LabelFor(model => model.Type, new { @class = "form-label" })
+                    @Html.DropDownListFor(model => model.Type, (SelectList)ViewBag.ClothesType, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="text-end">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-secondary ml-2" })
+                </div>
+            }
+        </div>
+    </div>
+</div>

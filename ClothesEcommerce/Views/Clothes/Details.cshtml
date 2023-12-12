@@ -1,0 +1,79 @@
+﻿@model ClothesEcommerce.Models.Cloth
+
+@{
+    Layout = "~/Views/_LayoutPage1.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Details</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            margin-top: 50px;
+        }
+
+        .item-images img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .details-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+            .details-container h2 {
+                color: #343a40;
+                font-size: 1.5rem;
+            }
+
+            .details-container p {
+                color: #6c757d;
+                font-size: 1.1rem;
+                line-height: 1.6;
+            }
+
+            .details-container h3 {
+                color: #007bff;
+                font-size: 1.25rem;
+                margin-top: 20px;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="item-images">
+                    @foreach (var item in Model.Pictures)
+                    {
+                        <img class="mb-3" src="@Url.Content(item.PicturePath)" alt="Alternate Text" />
+                    }
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class="details-container">
+                    <h2>@Html.DisplayFor(model => model.ClothName)</h2>
+                    <p>@Html.DisplayFor(model => model.Description)</p>
+                    <h3>Price: @Html.DisplayFor(model => model.Price)</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

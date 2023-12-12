@@ -1,0 +1,209 @@
+﻿<!DOCTYPE html>
+<html>
+@using ClothesEcommerce.Models;
+@{
+    ClothesEcomerceEntities3 db = new ClothesEcomerceEntities3();
+}
+<head>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Eclothes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            color: #343a40;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background-color: #343a40;
+            box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+            .navbar-brand:hover {
+                color: #f8f9fa;
+            }
+
+        .navbar-nav .nav-link {
+            color: #ffffff;
+            font-weight: 500;
+            transition: color 0.3s ease-in-out;
+        }
+
+            .navbar-nav .nav-link:hover {
+                color: #f8f9fa;
+            }
+
+        .navbar-toggler {
+            border-color: #ffffff;
+        }
+
+        .navbar-toggler-icon {
+            background-color: #ffffff;
+        }
+
+        .search-form {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+        }
+
+        .search-container {
+            position: relative;
+        }
+
+        #recherche {
+            border: none;
+            padding: 10px;
+            width: 200px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            background-color: #34383b;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+
+            button img {
+                width: 20px;
+                height: 20px;
+            }
+
+            button:hover {
+                background-color: #252628;
+            }
+
+        .content-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+            padding: 20px;
+        }
+
+        footer {
+            background-color: #343a40;
+            color: #ffffff;
+            text-align: center;
+            padding: 10px;
+            width: 100%;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="@Url.Action("Index", "Clothes")">Eclothes</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+
+                    <div class="search-form">
+                        @using (Html.BeginForm("Search", "Clothes", FormMethod.Get, new { @class = "search-container", onsubmit = "return handleSearchForm();" }))
+                        {
+                            <input type="search" id="recherche" name="id" placeholder="Search" onkeypress="return handleKeyPress(event)" />
+                        }
+
+                    </div>
+                    @if (Session["user"] == null && Session["admin"] == null)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link link" href="@Url.Action("Login", "Account")">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link link" href="@Url.Action("SignUp", "Account")">Register</a>
+                        </li>
+                    }
+                    else if (Session["user"] != null)
+                    {
+                        var userid = Convert.ToInt32(Session["user"]);
+                        var user = (from x in db.Users where x.UserID == userid select x.UserName).FirstOrDefault();
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Hi, @user
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="userDropdown" style="min-width: 100px;">
+                                
+                                <a class="dropdown-item" href="@Url.Action("UpdateProfile", "Account")">
+                                    Settings
+                                </a>
+                                <div class="dropdown-divider"></div>
+
+                                @{
+                                    if (Session["user"] != null || Session["admin"] != null)
+                                    {
+                                        <a class="dropdown-item" href="@Url.Action("Logout", "Account")">
+                                            <i class="fas fa-sign-out-alt"></i> Logout
+                                        </a>
+                                    }
+                                }
+                            </div>
+                        </li>
+
+
+
+                        var cart = (from x in db.Card_ where x.UserId == userid select x).Count();
+                        <li class="nav-item">
+                            <a class="nav-link link" href="@Url.Action("Cart", "Clothes")">
+                                <img src="~/Icons/icons8-caddie-64.png" style="width:24px;height:24px" alt="Alternate Text" /> @cart
+                            </a>
+                        </li>
+
+
+                    }
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content-container">
+        <div class="col-md-10">
+            @RenderBody()
+            @RenderSection("scripts", required: false)
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; @DateTime.Now.Year - My Clothing Store</p>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function handleKeyPress(event) {
+            if (event.keyCode === 13) {
+                event.preventDefault(); // Prevents the default action (e.g., form submission)
+                document.forms[0].submit(); // Submit the form
+                return false;
+            }
+            return true;
+        }
+    </script>
+</body>
+</html>

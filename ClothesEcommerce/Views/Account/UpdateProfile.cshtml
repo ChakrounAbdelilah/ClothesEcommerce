@@ -1,0 +1,74 @@
+﻿@model ClothesEcommerce.Models.User
+
+@{
+    ViewBag.Title = "UpdateProfile";
+    Layout = "~/Views/AccountLayout.cshtml";
+}
+
+<style>
+    /* Customize the style for all textboxes */
+    .custom-outline .form-control {
+        border-width: 0.5px;
+        border-radius: 0; /* Optional: remove border-radius for square corners */
+    }
+    
+        .custom-outline .form-control:focus {
+            border-color: #007bff; /* Change the border color on focus */
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+        .form-label{
+            padding-right:10px;
+        }
+</style>
+
+
+   
+
+            <h2 class="alert-success">@ViewBag.Success</h2>
+
+            @using (Html.BeginForm("UpdateProfile", "Account", FormMethod.Post, new { enctype = "multipart/form-data", @class = "needs-validation custom-outline", novalidate = "true" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="mb-3">
+                    <div class="input-group">
+                        @Html.LabelFor(model => model.UserName, new { @class = "form-label" })
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                        @Html.EditorFor(model => model.UserName, new { @class = "form-control", placeholder = "Username", required = "true" })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    <div class="input-group">
+                        @Html.LabelFor(model => model.FirstName, new { @class = "form-label" })
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                       @Html.EditorFor(model => model.FirstName, new { @class = "form-control", placeholder = "First Name", required = "true" })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-4">
+                    <div class="input-group">
+                        @Html.LabelFor(model => model.LastName, new { @class = "form-label" })
+
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                        @Html.EditorFor(model => model.LastName, new { @class = "form-control", placeholder = "Last Name", required = "true" })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="mb-3">
+                    <div class="input-group">
+                        @Html.LabelFor(model => model.Password, new { @class = "form-label" })
+                        <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                        @Html.PasswordFor(model => model.Password, new { @class = "form-control", placeholder = "Enter your password", required = "true" })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-secondary ml-2" })
+                </div>
+            }
