@@ -139,6 +139,7 @@
     <Content Include="Content\PagedList.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Global.asax" />
+    <Content Include="Icons\Filter.png" />
     <Content Include="Icons\Green_Caddie.png" />
     <Content Include="Icons\icons8-flèche-gauche-50.png" />
     <Content Include="Icons\icons8-supprimer-24.png" />

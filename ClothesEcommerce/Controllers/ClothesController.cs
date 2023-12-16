@@ -20,12 +20,47 @@ namespace ClothesEcommerce.Controllers
         ClothesEcomerceEntities3 db = new ClothesEcomerceEntities3();
 
         
-        public ActionResult Index(string id)
+        public ActionResult Index(string selectedType, string selectedCategory,string selectedPrice)
         {
-            ViewBag.Error = id;
-            return View(db.Clothes.ToList());
+            
+            var types =new List<string>() { "T-shirt", "Pants", "Shoes", "Hoodie", "Jacket"};
+            var categories =new List<string>(){ "Men", "Women", "Children", "Boys", "Girls" };
+            var prices =new List<string>(){ "High To Low", "Low To High" };
+
+            ViewBag.Types = new SelectList(types);
+            ViewBag.Categories = new SelectList(categories);
+            ViewBag.Prices = new SelectList(prices);
+
+
+            var data = (from x in db.Clothes select x);
+
+            if (!string.IsNullOrEmpty(selectedType))
+            {
+                data = data.Where(d => d.Type == selectedType);
+            }
+
+            if (!string.IsNullOrEmpty(selectedCategory))
+            {
+                data = data.Where(d => d.Category == selectedCategory);
+            }
+            if (!string.IsNullOrEmpty(selectedPrice))
+            {
+                if(selectedPrice == "High To Low")
+                {
+                    data = data.OrderByDescending(p => p.Price);
+                }
+                else if (selectedPrice == "Low To High")
+                {
+                    data = data.OrderBy(p => p.Price);
+                }
+            }
+            if (data.Count() == 0)
+            {
+                ViewBag.NoFiler= "Sorry, No result found";
+            }
+            return View(data.ToList());
         }
-   
+        
         [CustomAuthorization]
         public ActionResult Create()
         {
@@ -327,7 +362,10 @@ namespace ClothesEcommerce.Controllers
         {
             return View();
         }
-       
+
+        
+
+        
 
     }
 }
