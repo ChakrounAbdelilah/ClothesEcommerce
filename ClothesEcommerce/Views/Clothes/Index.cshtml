@@ -1,4 +1,5 @@
-﻿@model IEnumerable<ClothesEcommerce.Models.Cloth>
+﻿@using PagedList.Mvc
+@model  PagedList.IPagedList<ClothesEcommerce.Models.Cloth>
 
 @{
     ViewBag.Title = "Index";
@@ -7,9 +8,7 @@
 <style>
 
     .fixed-filter {
-        
-        
-        margin-left:150px;
+        margin-left: 150px;
         top: 10%;
         width: 900px;
         left: 50%;
@@ -66,7 +65,7 @@
                         }
                         <img class="card-img-top" style="object-fit: scale-down; height: 225px;" src="@Url.Content(firstPic?.PicturePath ?? "placeholder.jpg")" alt="Product Image">
                         <div class="card-body">
-                            <h3 class="card-title">@cloth.Description</h3>
+                            <h3 class="card-title">@cloth.ClothName</h3>
                             <p class="card-text">@cloth.Description</p>
                             <h4>@string.Format("{0:C}", cloth.Price)</h4>
                         </div>
@@ -98,5 +97,29 @@
                 </div>
             }
         </div>
+    </div>
+</div>
+<div id="container" style="margin-left: 40%">
+    <div class="pagination-container text-center mt-4">
+        <ul class="pagination">
+            <li class="page-item @(Model.PageNumber == 1 ? "disabled" : "")">
+                <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber - 1})" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            @for (int i = 1; i <= Model.PageCount; i++)
+            {
+                <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("Index", new { page = i})">@i</a>
+                </li>
+            }
+
+            <li class="page-item @(Model.PageNumber == Model.PageCount ? "disabled" : "")">
+                <a class="page-link" href="@Url.Action("Index", new { page = Model.PageNumber + 1})" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
     </div>
 </div>

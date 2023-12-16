@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using System.Web.UI;
 using Antlr.Runtime.Tree;
 using ClothesEcommerce.Models;
+using PagedList;
 using PayPal.Api;
 
 namespace ClothesEcommerce.Controllers
@@ -20,7 +21,7 @@ namespace ClothesEcommerce.Controllers
         ClothesEcomerceEntities3 db = new ClothesEcomerceEntities3();
 
         
-        public ActionResult Index(string selectedType, string selectedCategory,string selectedPrice)
+        public ActionResult Index(string selectedType, string selectedCategory,string selectedPrice,int?page)
         {
             
             var types =new List<string>() { "T-shirt", "Pants", "Shoes", "Hoodie", "Jacket"};
@@ -58,7 +59,12 @@ namespace ClothesEcommerce.Controllers
             {
                 ViewBag.NoFiler= "Sorry, No result found";
             }
-            return View(data.ToList());
+
+            int pagesize = 6, pageindex = 1;
+            pageindex = page.HasValue ? Convert.ToInt32(page) : 1;
+            data = data.OrderByDescending(x => x.ClothesID);
+           
+            return View(data.ToList().ToPagedList(pageindex,pagesize));
         }
         
         [CustomAuthorization]
@@ -79,6 +85,7 @@ namespace ClothesEcommerce.Controllers
             ViewBag.ClothesCategory = ClothesCategory;
             return View();
         }
+       
 
         [CustomAuthorization]
         [HttpPost]
