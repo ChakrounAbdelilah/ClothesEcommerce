@@ -6,15 +6,16 @@ This project is a simple Clothes Ecommerce demo built with ASP.NET MVC, HTML, CS
 Login and Logout.
 the website contain two sides:
 ### Admin Side:
-Product Management (Add, Delete, Update)
+    Product Management (Add, Delete, Update)
 
 ### Client Side:
-Browse Products
-Search Products
-Add to Cart
-Checkout
+    Browse Products
+    Search Products
+    Add to Cart
+    Checkout
 
 Filtration.
+
 Pagination.
 
 
